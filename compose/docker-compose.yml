@@ -1,0 +1,6 @@
+version: "2"
+services:
+  etl:
+    container_name: ohie-etl
+    image: uwitech/etl
+    env_file: .env
