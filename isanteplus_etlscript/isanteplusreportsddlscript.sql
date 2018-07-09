@@ -1,4 +1,4 @@
-DROP DATABASE if exists isanteplus; 
+DROP DATABASE if exists isanteplus;
 create database if not exists isanteplus;
 SET GLOBAL event_scheduler = 1 ;
 use isanteplus;
@@ -39,8 +39,8 @@ CREATE TABLE if not exists `patient` (
 CREATE TABLE  if not exists `patient_visit` (
   `visit_date` date DEFAULT NULL,
   `visit_id` int(11),
-  `encounter_id` int(11) DEFAULT NULL,
-  `location_id` int(11) DEFAULT NULL,
+  `encounter_id` int(11),
+  `location_id` int(11),
   `patient_id` int(11),
   `start_date` date DEFAULT NULL,
   `stop_date` date DEFAULT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS patient_dispensing (
     /*CONSTRAINT FOREIGN KEY (patient_id) REFERENCES isanteplus.patient(patient_id),*/
 	INDEX(visit_date),
 	INDEX(encounter_id),
-	INDEX(patient_id)	
+	INDEX(patient_id)
 );
 /*Table patient_imagerie*/
 
@@ -162,7 +162,7 @@ DROP TABLE IF EXISTS arv_status_loockup;
 	definition longtext,
 	insertDate date);
 
-	insert into arv_status_loockup values 
+	insert into arv_status_loockup values
 	(1,'Death on ART','Décédés','Tout patient mis sous ARV et ayant un rapport d’arrêt rempli pour motif de décès',date(now())),
 	(2,'Stopped','Arrêtés','Tout patient mis sous ARV et ayant un rapport d’arrêt rempli pour motif d’arrêt de traitement',date(now())),
 	(3,'Transfert','Transférés','Tout patient mis sous ARV et ayant un rapport d’arrêt rempli pour motif de transfert',date(now())),
@@ -200,7 +200,7 @@ Raison d'arrêt inconnue=1067
 	reason_name longtext,
 	CONSTRAINT pk_dreason PRIMARY KEY (patient_id,visit_id,reason)
 	);
-/*Create a table for raison arretés concept_id = 1667, 
+/*Create a table for raison arretés concept_id = 1667,
 		answer_concept_id IN (1754,160415,115198,159737,5622)
 		That table allow us to delete from the table discontinuation_reason
 		WHERE the discontinuation_raison (arretés raison) not in Adhérence inadéquate=115198
@@ -225,7 +225,7 @@ Raison d'arrêt inconnue=1067
 	end_date date,
 	dis_reason int(11)
 	);
-	
+
 /*Create table for medicaments prescrits*/
 DROP TABLE IF EXISTS patient_prescription;
 CREATE TABLE IF NOT EXISTS patient_prescription (
@@ -238,12 +238,12 @@ CREATE TABLE IF NOT EXISTS patient_prescription (
 	drug_id int(11) not null,
 	rx_or_prophy int(11),
     posology text,
-    number_day int(11),	
+    number_day int(11),
 	CONSTRAINT pk_patient_dispensing PRIMARY KEY(encounter_id,location_id,drug_id),
     /*CONSTRAINT FOREIGN KEY (patient_id) REFERENCES isanteplus.patient(patient_id),*/
 	INDEX(visit_date),
 	INDEX(encounter_id),
-	INDEX(patient_id)	
+	INDEX(patient_id)
 );
 
  /*Create table for lab*/
@@ -265,9 +265,9 @@ CREATE TABLE IF NOT EXISTS patient_prescription (
 		CONSTRAINT pk_patient_laboratory PRIMARY KEY (patient_id,encounter_id,test_id),
 		INDEX(visit_date),
 		INDEX(encounter_id),
-		INDEX(patient_id)	
+		INDEX(patient_id)
 	);
-	
+
 	DROP TABLE IF EXISTS patient_pregnancy;
 	CREATE TABLE IF NOT EXISTS patient_pregnancy(
 	patient_id int(11),
@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS patient_prescription (
 	start_date date,
 	end_date date,
 	CONSTRAINT pk_patient_preg PRIMARY KEY (patient_id,encounter_id));
-	
+
 	/*Create table alert_lookup*/
 	DROP TABLE IF EXISTS alert_lookup;
 	CREATE TABLE IF NOT EXISTS alert_lookup(
@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS patient_prescription (
 		insert_date date
 	);
 	/*table alert_lookup insertion*/
-	INSERT INTO alert_lookup(id,libelle,insert_date) VALUES 
+	INSERT INTO alert_lookup(id,libelle,insert_date) VALUES
 	(1,'Nombre de patient sous ARV depuis 6 mois sans un résultat de charge virale',DATE(now())),
 	(2,'Nombre de femmes enceintes, sous ARV depuis 4 mois sans un résultat de charge virale',DATE(now())),
 	(3,'Nombre de patients ayant leur dernière charge virale remontant à au moins 12 mois',DATE(now())),
@@ -297,8 +297,8 @@ CREATE TABLE IF NOT EXISTS patient_prescription (
 	id_alert int(11),
 	encounter_id int(11),
 	date_alert date);
-	
-	/*TABLE patient_diagnosis, this table contains all patient diagnosis*/	
+
+	/*TABLE patient_diagnosis, this table contains all patient diagnosis*/
 DROP TABLE IF EXISTS patient_diagnosis;
 CREATE TABLE IF NOT EXISTS patient_diagnosis(
 	patient_id int(11),
@@ -311,7 +311,7 @@ CREATE TABLE IF NOT EXISTS patient_diagnosis(
 	answer_concept_id int(11),
 	suspected_confirmed int(11),
 	primary_secondary int(11),
-	constraint pk_patient_diagnosis 
+	constraint pk_patient_diagnosis
 	PRIMARY KEY (encounter_id,location_id,concept_group,concept_id,answer_concept_id)
 );
 
@@ -327,7 +327,7 @@ DROP TABLE IF EXISTS visit_type;
 	concept_id int(11),
 	v_type int(11),
 	encounter_date date,
-	CONSTRAINT pk_isanteplus_visit_type 
+	CONSTRAINT pk_isanteplus_visit_type
 	PRIMARY KEY (encounter_id,location_id,obs_group,concept_id,v_type));
 
 /*Create table virological_tests */
@@ -346,7 +346,7 @@ DROP TABLE IF EXISTS virological_tests;
 	age_unit int(11),
 	test_date date,
 	constraint pk_virological_tests PRIMARY KEY (encounter_id,location_id,obs_group_id,test_id));
-	
+
 /* Create patient_delivery table */
 DROP TABLE IF EXISTS patient_delivery;
 CREATE TABLE IF NOT EXISTS patient_delivery(
@@ -361,7 +361,7 @@ CREATE TABLE IF NOT EXISTS patient_delivery(
 	delivrance int(11),
 	encounter_date date,
 	constraint pk_patient_delivery PRIMARY KEY (encounter_id,location_id));
-/*Create table pediatric_first_visit*/		   
+/*Create table pediatric_first_visit*/
 	DROP TABLE IF EXISTS pediatric_hiv_visit;
 	CREATE TABLE IF NOT EXISTS pediatric_hiv_visit(
 	patient_id int(11),
@@ -372,8 +372,8 @@ CREATE TABLE IF NOT EXISTS patient_delivery(
 	actual_vih_status int(11),
 	encounter_date date,
 	constraint pk_pediatric_hiv_visit PRIMARY KEY (patient_id,encounter_id,location_id));
-	
-	/*Create table patient_menstruation*/		   
+
+	/*Create table patient_menstruation*/
 	DROP TABLE IF EXISTS patient_menstruation;
 	CREATE TABLE IF NOT EXISTS patient_menstruation(
 	patient_id int(11),
@@ -384,7 +384,7 @@ CREATE TABLE IF NOT EXISTS patient_delivery(
 	ddr date,
 	encounter_date date,
 	constraint pk_patient_menstruation PRIMARY KEY (patient_id,encounter_id,location_id));
-	
+
 	/*Create table for vih_risk_factor*/
 	DROP TABLE IF EXISTS vih_risk_factor;
 	CREATE TABLE IF NOT EXISTS vih_risk_factor(
@@ -425,7 +425,7 @@ CREATE TABLE IF NOT EXISTS patient_delivery(
 	last_insert_date date DEFAULT NULL,
 	constraint pk_health_qual_patient_visit PRIMARY KEY (patient_id, encounter_id, location_id));
 	/*Eposed infants table
-		
+
 	*/
 	DROP TABLE IF EXISTS exposed_infants;
 	CREATE table IF NOT EXISTS exposed_infants(
@@ -451,7 +451,7 @@ CREATE TABLE IF NOT EXISTS patient_delivery(
 	age_unit int(11),
 	test_date date,
 	constraint pk_serological_tests PRIMARY KEY (encounter_id,location_id,obs_group_id,test_id));
-	
+
 	/*Create table patient_pcr*/
 	DROP TABLE IF EXISTS patient_pcr;
 	CREATE TABLE IF NOT EXISTS patient_pcr(
@@ -462,5 +462,5 @@ CREATE TABLE IF NOT EXISTS patient_delivery(
 		pcr_result int(11),
 		test_date date
 	);
-	
-GRANT SELECT ON isanteplus.* TO 'openmrs_user'@'localhost';
+
+GRANT SELECT ON isanteplus.* TO 'root'@'localhost';
