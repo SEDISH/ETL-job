@@ -13,7 +13,7 @@ scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 mkdir -p $scriptDir/logs;
 
 python $scriptDir/etl_extension/org_units/sync_org_unit.py $DB_PASS $DB_ADDRESS $DHIS_PASSWORD $DHIS_URL
-$scriptDir/generateAllData.sh $DB_PASS;
+$scriptDir/generateAllData.sh $DB_PASS "$DB_ADDRESS";
 $scriptDir/deleteAllProgramsData.sh $DHIS_URL $DHIS_PASSWORD;
 
 curl -k -X POST -u "$USERNAME:$DHIS_PASSWORD" "http://$DHIS_URL/api/26/maintenance/analyticsTablesClear" 2>&1 | \
