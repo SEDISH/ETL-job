@@ -1,6 +1,6 @@
 #!/bin/bash
-if [ -z "$2" ]; then
-  echo "Example usage: sudo ./generate_event_reports.sh <db_password> <destination_catalog>"
+if [ -z "$3" ]; then
+  echo "Example usage: sudo ./generate_event_reports.sh <db_password> <destination_catalog> <db_address>"
   exit
 fi
 
@@ -8,6 +8,7 @@ USER=root
 DB=isanteplus
 DB_PASS=$1
 DESTINATION_CATALOG=$2
+DB_ADDRESS=$3
 
 function convert_files() {
   find $DESTINATION_CATALOG | egrep $MATCH_FILE | \
@@ -17,14 +18,13 @@ function convert_files() {
 }
 
 generateData() {
-  REPORT_NAME=$1;
-  mysql -u $USER -p$DB_PASS -D $DB -e "CALL $REPORT_NAME();" > "$DESTINATION_CATALOG/$REPORT_NAME.json"
+  REPORT_NAME=$1
+  mysql -u $USER -p$DB_PASS -D $DB -h $DB_ADDRESS -e "CALL $REPORT_NAME();" > "$DESTINATION_CATALOG/$REPORT_NAME.json"
 }
 
 mkdir -p $DESTINATION_CATALOG
-
-mysql -u $USER -p$DB_PASS -D $DB -e "CALL org_unit_etl_extension();"
-mysql -u $USER -p$DB_PASS -D $DB -e "CALL dashboard_etl_extension();"
+mysql -u $USER -p$DB_PASS -D $DB -h $DB_ADDRESS -e "CALL org_unit_etl_extension();"
+mysql -u $USER -p$DB_PASS -D $DB -h $DB_ADDRESS -e "CALL dashboard_etl_extension();"
 
 
 
