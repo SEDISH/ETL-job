@@ -382,8 +382,13 @@ BEGIN
             COUNT(p.patient_id) AS grandTotal, -- Totaux généraux
             version.value_reference -- Version
           FROM isanteplus.tmp_idgen tmp,
-            ( SELECT location_id, MIN(date_created) oldestDate, MAX(date_created) latestDate
-              FROM `openmrs`.obs
+            ( SELECT location_id, 
+				CASE
+					WHEN MIN(date_created) < DATE('2005-04-08') OR MIN(date_created) > CURDATE() THEN DATE('2005-04-08')
+					ELSE MIN(date_created)
+				END AS oldestDate, 
+				MAX(date_created) latestDate
+              FROM `openmrs`.encounter
               GROUP BY location_id ) AS dates,
             patient p
             LEFT OUTER JOIN ( SELECT l.location_id, l.value_reference
