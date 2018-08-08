@@ -429,9 +429,9 @@ INSERT INTO patient_status_arv(patient_id,id_status,start_date)
 	END$$
 DELIMITER ;
 
--- DROP EVENT if exists patient_status_arv_event;
--- 	CREATE EVENT if not exists patient_status_arv_event
--- 	ON SCHEDULE EVERY 1 DAY
--- 	 STARTS now()
--- 		DO
+DROP EVENT if exists patient_status_arv_event;
+	CREATE EVENT if not exists patient_status_arv_event
+	ON SCHEDULE EVERY 1 DAY
+	 STARTS now()
+		DO
 		call patient_status_arv();
