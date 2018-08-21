@@ -1,2 +1,2 @@
-INSERT IGNORE INTO org_code_uid (uid, code, path)
-VALUES (%s, %s, %s);
+INSERT IGNORE INTO org_code_uid (uid, code, path, name)
+VALUES (%s, %s, %s, %s);

@@ -18,10 +18,11 @@ URL = args.dhis2_url_port
 class Unit:
     """Unit class"""
 
-    def __init__(self, uid, code, path):
+    def __init__(self, uid, code, path, name):
         self.uid = uid
         self.code = code
         self.path = path
+        self.name = name
 
 def getScript(filename):
     fd = open(filename, 'r')
@@ -41,6 +42,12 @@ def extractCode(orgUnit, orgUnitDetails):
     except KeyError:
         orgUnit['code'] = None
 
+def extractName(orgUnit, orgUnitDetails):
+    try:
+        orgUnit['name'] = orgUnitDetails['name']
+    except KeyError:
+        orgUnit['name'] = None
+
 def extractPath(orgUnit, orgUnitDetails):
     try:
         path = orgUnitDetails['path']
@@ -56,6 +63,7 @@ def fetchOrgUnit(orgUnits):
         unitParams = wholeUnit.json()
         extractCode(unit, unitParams)
         extractPath(unit, unitParams)
+        extractName(unit, unitParams)
         print(unit)
     return orgUnits
 
@@ -66,7 +74,7 @@ ISANTEPLUS = 'isanteplus'
 warnings.filterwarnings('ignore', category=MySQLdb.Warning)
 
 # connect with the database
-con = MySQLdb.connect(DB_HOST, DB_USER, DB_PASSWORD, ISANTEPLUS)
+con = MySQLdb.connect(DB_HOST, DB_USER, DB_PASSWORD, ISANTEPLUS, charset='utf8', use_unicode=True)
 cursor = con.cursor()
 
 # prepare all scripts
@@ -86,8 +94,8 @@ cursor.execute(create_org_code_uid)
 # select all organisations from the database
 dbValues = []
 cursor.execute(select_org_code_uid)
-for (uid, code, path) in cursor:
-    dbValues.append(Unit(uid, code, path))
+for (uid, code, path, name) in cursor:
+    dbValues.append(Unit(uid, code, path, name))
 
 # fetch only those which were not fetched before
 toFetch = []
@@ -100,7 +108,7 @@ orgUnits = fetchOrgUnit(toFetch)
 
 # insert new organisations
 for unit in orgUnits:
-    data = (unit['id'], unit['code'], unit['path'])
+    data = (unit['id'], unit['code'], unit['path'], unit['name'])
     executeInsertScript(insert_org_code_uid, data)
 
 con.commit()
