@@ -11,7 +11,7 @@ BEGIN
 
   INSERT IGNORE INTO p_on_haart (patient_id, id_status, ac)
     SELECT p.patient_id, psa.id_status,
-      CASE WHEN (DATE_FORMAT(NOW(), '%y') - DATE_FORMAT(p.birthdate, '%y') > 14)
+      CASE WHEN (YEAR(NOW()) - YEAR(p.birthdate) > 14)
         THEN 'A' -- adult
           ELSE 'C' -- child
       END
@@ -32,7 +32,7 @@ BEGIN
 
   INSERT IGNORE INTO p_on_palliative_care (patient_id, id_status, ac)
     SELECT p.patient_id, psa.id_status,
-      CASE WHEN(DATE_FORMAT(NOW(), '%y') - DATE_FORMAT(p.birthdate, '%y') > 14)
+      CASE WHEN(YEAR(NOW()) - YEAR(p.birthdate) > 14)
         THEN 'A' -- adult
         ELSE 'C' -- child
       END
