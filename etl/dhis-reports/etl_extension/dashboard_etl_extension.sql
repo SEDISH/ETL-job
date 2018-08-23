@@ -11,9 +11,9 @@ BEGIN
 
   INSERT IGNORE INTO p_on_haart (patient_id, id_status, ac)
     SELECT p.patient_id, psa.id_status,
-      CASE WHEN (YEAR(NOW()) - YEAR(p.birthdate) > 14)
-        THEN 'A' -- adult
-          ELSE 'C' -- child
+      CASE WHEN (YEAR(NOW()) - YEAR(p.birthdate) < 14)
+        THEN 'C' -- child
+          ELSE 'A' -- adult
       END
     FROM patient p
     LEFT JOIN patient_status_arv psa
@@ -32,9 +32,9 @@ BEGIN
 
   INSERT IGNORE INTO p_on_palliative_care (patient_id, id_status, ac)
     SELECT p.patient_id, psa.id_status,
-      CASE WHEN(YEAR(NOW()) - YEAR(p.birthdate) > 14)
-        THEN 'A' -- adult
-        ELSE 'C' -- child
+      CASE WHEN (YEAR(NOW()) - YEAR(p.birthdate) < 14)
+        THEN 'C' -- child
+          ELSE 'A' -- adult
       END
     FROM patient p
     LEFT JOIN patient_status_arv psa
