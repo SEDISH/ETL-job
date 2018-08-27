@@ -1573,10 +1573,10 @@ INSERT into virological_tests
     END$$
 DELIMITER ;
 
-	
-    DROP EVENT if exists isanteplusreports_dml_event;
-	CREATE EVENT if not exists isanteplusreports_dml_event
-	ON SCHEDULE EVERY 3 HOUR
-	 STARTS now()
-		DO
-		call isanteplusreports_dml();
+
+  --   DROP EVENT if exists isanteplusreports_dml_event;
+	-- CREATE EVENT if not exists isanteplusreports_dml_event
+	-- ON SCHEDULE EVERY 3 HOUR
+	--  STARTS now()
+	-- 	DO
+	-- 	call isanteplusreports_dml();

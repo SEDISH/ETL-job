@@ -12,6 +12,9 @@ DHIS_URL=$4;
 scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 mkdir -p $scriptDir/logs;
 
+mysql -u root -p${DB_PASS} -h ${DB_ADDRESS} -D isanteplus -e "CALL isanteplusreports_dml();"
+mysql -u root -p${DB_PASS} -h ${DB_ADDRESS} -D isanteplus -e "CALL patient_status_arv();"
+
 python $scriptDir/etl_extension/org_units/sync_org_unit.py $DB_PASS $DB_ADDRESS $DHIS_PASSWORD $DHIS_URL
 $scriptDir/generateAllData.sh $DB_PASS "$DB_ADDRESS";
 $scriptDir/deleteAllProgramsData.sh $DHIS_URL $DHIS_PASSWORD;
